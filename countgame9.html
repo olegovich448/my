@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Устный счёт 5-7 класс</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        
+        /* Кнопки уровня сложности */
+        .level-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .level-btn {
+            flex: 1;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .level-btn:hover {
+            background: #f0f0ff;
+        }
+        
+        .level-btn.active {
+            background: #667eea;
+            color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .settings {
+            margin-bottom: 25px;
+        }
+        
+        .settings label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .checkboxes {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .checkboxes label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: normal;
+            cursor: pointer;
+        }
+        
+        .problem {
+            background: #f5f5f5;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .problem-text {
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            font-size: 24px;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 15px;
+            caret-color: #667eea;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #764ba2;
+        }
+        
+        /* Поле обратной связи — всегда видимое */
+        .feedback {
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            min-height: 54px;
+            background: #f5f5f5;
+            color: #888;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .feedback.correct {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+        
+        .feedback.incorrect {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+        
+        .feedback.warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            font-size: 13px;
+            color: #666;
+            margin-top: 3px;
+        }
+        
+        /* Кнопка "Новая задача" */
+        .new-problem-btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            background: #667eea;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+        }
+        
+        .new-problem-btn:hover {
+            background: #5568d3;
+        }
+        
+        /* Цифровая клавиатура (уменьшена на 15%) */
+        .numpad {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 7px;
+            padding: 13px;
+            background: #f5f5f5;
+            border-radius: 15px;
+        }
+        
+        .numpad-btn {
+            padding: 15px 0;
+            font-size: 19px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            background: white;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.15s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .numpad-btn:hover {
+            background: #e8e8e8;
+        }
+        
+        .numpad-btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .numpad-btn.num {
+            background: white;
+        }
+        
+        .numpad-btn.action {
+            background: #e0e0e0;
+            color: #555;
+        }
+        
+        .numpad-btn.minus {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .numpad-btn.enter {
+            background: #48bb78;
+            color: white;
+            grid-column: span 2;
+        }
+        
+        .numpad-btn.enter:hover {
+            background: #38a169;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧮 Устный счёт</h1>
+        
+        <!-- Кнопки уровня сложности -->
+        <div class="level-buttons">
+            <button class="level-btn active" data-level="easy">Лёгкий</button>
+            <button class="level-btn" data-level="medium">Средний</button>
+            <button class="level-btn" data-level="hard">Сложный</button>
+        </div>
+        
+        <div class="settings">
+            <label>Выберите операции:</label>
+            <div class="checkboxes">
+                <label>
+                    <input type="checkbox" id="add" checked> Сложение
+                </label>
+                <label>
+                    <input type="checkbox" id="subtract" checked> Вычитание
+                </label>
+                <label>
+                    <input type="checkbox" id="multiply" checked> Умножение
+                </label>
+                <label>
+                    <input type="checkbox" id="divide" checked> Деление
+                </label>
+            </div>
+        </div>
+        
+        <div class="problem">
+            <div class="problem-text" id="problemText">Загрузка...</div>
+        </div>
+        
+        <input type="text" id="answer" placeholder="Ваш ответ" inputmode="none" autocomplete="off">
+        
+        <!-- Поле обратной связи — всегда видимое -->
+        <div class="feedback" id="feedback">Введите ответ и нажмите ⏎ Проверить</div>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-value" id="correct">0</div>
+                <div class="stat-label">Правильно</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="total">0</div>
+                <div class="stat-label">Всего</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="percentage">0%</div>
+                <div class="stat-label">Успех</div>
+            </div>
+        </div>
+        
+        <!-- Кнопка "Новая задача" -->
+        <button class="new-problem-btn" id="newBtn">🔄 Новая задача</button>
+        
+        <!-- Цифровая клавиатура -->
+        <div class="numpad">
+            <button class="numpad-btn num" data-key="7">7</button>
+            <button class="numpad-btn num" data-key="8">8</button>
+            <button class="numpad-btn num" data-key="9">9</button>
+            <button class="numpad-btn action" data-key="backspace">⌫</button>
+            
+            <button class="numpad-btn num" data-key="4">4</button>
+            <button class="numpad-btn num" data-key="5">5</button>
+            <button class="numpad-btn num" data-key="6">6</button>
+            <button class="numpad-btn action" data-key="clear">C</button>
+            
+            <button class="numpad-btn num" data-key="1">1</button>
+            <button class="numpad-btn num" data-key="2">2</button>
+            <button class="numpad-btn num" data-key="3">3</button>
+            <button class="numpad-btn minus" data-key="-">−</button>
+            
+            <button class="numpad-btn num" data-key="0">0</button>
+            <button class="numpad-btn num" data-key=".">.</button>
+            <button class="numpad-btn enter" data-key="enter">⏎ Проверить</button>
+        </div>
+    </div>
+
+    <script>
+        let currentProblem = null;
+        let correctCount = 0;
+        let totalCount = 0;
+        let currentLevel = 'easy';
+        let feedbackTimer = null;
+        
+        const operations = {
+            add: { symbol: '+', func: (a, b) => a + b },
+            subtract: { symbol: '-', func: (a, b) => a - b },
+            multiply: { symbol: '×', func: (a, b) => a * b },
+            divide: { symbol: '÷', func: (a, b) => a / b }
+        };
+        
+        // Диапазоны чисел для уровней сложности
+        const levelRanges = {
+            easy: {
+                addSubMax: 50,
+                multiplyMax: 10,
+                divideMax: 10,
+                answerMax: 10
+            },
+            medium: {
+                addSubMax: 125,
+                multiplyMax: 15,
+                divideMax: 12,
+                answerMax: 12
+            },
+            hard: {
+                addSubMax: 200,
+                multiplyMax: 20,
+                divideMax: 15,
+                answerMax: 15
+            }
+        };
+        
+        // Переключение уровня сложности
+        document.querySelectorAll('.level-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentLevel = btn.dataset.level;
+            });
+        });
+        
+        function getSelectedOperations() {
+            const selected = [];
+            if (document.getElementById('add').checked) selected.push('add');
+            if (document.getElementById('subtract').checked) selected.push('subtract');
+            if (document.getElementById('multiply').checked) selected.push('multiply');
+            if (document.getElementById('divide').checked) selected.push('divide');
+            return selected;
+        }
+        
+        function generateProblem() {
+            const selectedOps = getSelectedOperations();
+            if (selectedOps.length === 0) {
+                alert('Выберите хотя бы одну операцию!');
+                return null;
+            }
+            
+            const op = selectedOps[Math.floor(Math.random() * selectedOps.length)];
+            const ranges = levelRanges[currentLevel];
+            let a, b, answer;
+            
+            if (op === 'multiply') {
+                a = Math.floor(Math.random() * (ranges.multiplyMax - 2 + 1)) + 2;
+                b = Math.floor(Math.random() * (ranges.multiplyMax - 2 + 1)) + 2;
+                answer = operations[op].func(a, b);
+            } else if (op === 'divide') {
+                b = Math.floor(Math.random() * (ranges.divideMax - 2 + 1)) + 2;
+                answer = Math.floor(Math.random() * ranges.answerMax) + 2;
+                a = b * answer;
+            } else {
+                a = Math.floor(Math.random() * ranges.addSubMax) + 10;
+                b = Math.floor(Math.random() * ranges.addSubMax) + 5;
+                
+                if (op === 'subtract') {
+                    // Для сложного уровня с вероятностью 35% разрешаем отрицательный ответ
+                    if (currentLevel === 'hard' && Math.random() < 0.35) {
+                        // Гарантируем отрицательный ответ: b должно быть больше a
+                        if (a >= b) {
+                            [a, b] = [b, a];
+                        }
+                    } else {
+                        // Для других уровней или в 65% случаев — гарантируем положительный ответ
+                        if (a < b) {
+                            [a, b] = [b, a];
+                        }
+                    }
+                }
+                
+                answer = operations[op].func(a, b);
+            }
+            
+            return {
+                text: `${a} ${operations[op].symbol} ${b} = ?`,
+                answer: answer
+            };
+        }
+        
+        // Показывает сообщение в feedback и автоматически очищает его через delay мс
+        function showFeedback(text, type, delay = 2000) {
+            const feedback = document.getElementById('feedback');
+            
+            // Отменяем предыдущий таймер, если был
+            if (feedbackTimer) {
+                clearTimeout(feedbackTimer);
+                feedbackTimer = null;
+            }
+            
+            feedback.textContent = text;
+            feedback.className = 'feedback ' + type;
+            
+            // Через delay возвращаем поле в исходное состояние
+            feedbackTimer = setTimeout(() => {
+                feedback.textContent = 'Введите ответ и нажмите ⏎ Проверить';
+                feedback.className = 'feedback';
+                feedbackTimer = null;
+            }, delay);
+        }
+        
+        function newProblem() {
+            currentProblem = generateProblem();
+            if (currentProblem) {
+                document.getElementById('problemText').textContent = currentProblem.text;
+                document.getElementById('answer').value = '';
+                // Возвращаем feedback в исходное состояние
+                if (feedbackTimer) {
+                    clearTimeout(feedbackTimer);
+                    feedbackTimer = null;
+                }
+                const feedback = document.getElementById('feedback');
+                feedback.textContent = 'Введите ответ и нажмите ⏎ Проверить';
+                feedback.className = 'feedback';
+            }
+        }
+        
+        function checkAnswer() {
+            const input = document.getElementById('answer');
+            const userAnswer = parseFloat(input.value);
+            
+            if (input.value.trim() === '' || isNaN(userAnswer)) {
+                showFeedback('⚠ Введите число!', 'warning', 1500);
+                return;
+            }
+            
+            totalCount++;
+            
+            if (Math.abs(userAnswer - currentProblem.answer) < 0.01) {
+                correctCount++;
+                showFeedback('✓ Правильно! Молодец!', 'correct', 2000);
+            } else {
+                showFeedback(`✗ Неправильно. Правильный ответ: ${currentProblem.answer}`, 'incorrect', 3000);
+            }
+            
+            updateStats();
+            
+            // Автоматически генерируем новую задачу
+            const delay = Math.abs(userAnswer - currentProblem.answer) < 0.01 ? 2000 : 3000;
+            setTimeout(() => {
+                newProblem();
+            }, delay);
+        }
+        
+        function updateStats() {
+            document.getElementById('correct').textContent = correctCount;
+            document.getElementById('total').textContent = totalCount;
+            const percentage = totalCount > 0 ? Math.round((correctCount / totalCount) * 100) : 0;
+            document.getElementById('percentage').textContent = percentage + '%';
+        }
+        
+        // Обработка цифровой клавиатуры
+        function handleNumpadKey(key) {
+            const input = document.getElementById('answer');
+            
+            if (key === 'enter') {
+                checkAnswer();
+                return;
+            }
+            
+            if (key === 'clear') {
+                input.value = '';
+                return;
+            }
+            
+            if (key === 'backspace') {
+                input.value = input.value.slice(0, -1);
+                return;
+            }
+            
+            if (key === '-') {
+                if (input.value === '' || input.value === '-') {
+                    input.value = '-';
+                } else if (!input.value.includes('-')) {
+                    input.value = '-' + input.value;
+                }
+                return;
+            }
+            
+            if (key === '.') {
+                if (!input.value.includes('.')) {
+                    input.value += input.value === '' ? '0.' : '.';
+                }
+                return;
+            }
+            
+            input.value += key;
+        }
+        
+        document.querySelectorAll('.numpad-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                handleNumpadKey(btn.dataset.key);
+            });
+        });
+        
+        // Обработчики кнопок
+        document.getElementById('newBtn').addEventListener('click', newProblem);
+        
+        // Поддержка физической клавиатуры
+        document.getElementById('answer').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+        
+        // Запускаем первую задачу при загрузке страницы
+        newProblem();
+    </script>
+</body>
+</html>
